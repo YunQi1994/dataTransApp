@@ -1,5 +1,5 @@
 # -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
-
+import time
 from os import path
 import pandas as pd
 from tkinter import *
@@ -13,13 +13,15 @@ default_dir = __file__
 file_path = askopenfilename(title=u'选择文件', initialdir=(path.abspath(path.dirname(default_dir))))
 
 # read file
-df_raw = pd.read_csv(file_path)
+df_raw = pd.read_excel(file_path)
 
 # check format
 valid_format = {"类型", "名称", "业务单号", "支付流水号", "关联单号", "交易来源地", "账务主体", '账户', "收入(元)", "支出(元)", "余额(元)", "支付方式", "交易对手",
                 "渠道", "下单时间", "入账时间", "操作人", "附加信息", "备注"}
 if set(df_raw.columns.values) != valid_format:
-    print("文件格式不正确")
+    print("文件格式不正确:")
+    print(df_raw.columns.values)
+    time.sleep(5)
     sys.exit()
 
 df_result = pd.DataFrame(
