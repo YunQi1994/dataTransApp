@@ -33,7 +33,7 @@ df_transaction_fee = df_raw[df_raw['类型'] == '交易手续费'].reset_index(d
 
 
 def get_fee(order_id):
-    fee = -1
+    fee = 0
     x = df_transaction_fee[df_transaction_fee['业务单号'] == order_id]['支出(元)']
     if len(x.values) == 1:
         fee = x.values[0]
@@ -41,7 +41,7 @@ def get_fee(order_id):
 
 
 def get_refund_and_payment_id(order_id):
-    refund = -1
+    refund = 0
     payment_id = '-'
     x = df_refund[df_refund['业务单号'] == order_id]['支出(元)']
     if len(x.values) == 1:
@@ -76,7 +76,7 @@ def save_result(result):
 
 
 def save_missing_refunds(result):
-    x = result[result['退款金额'] > -1]['业务单号'].values
+    x = result[result['退款金额'] >= 0]['业务单号'].values
     y = df_refund['业务单号']
     missing_records = [v for v in y if v not in x]
     print('missing_refunds', missing_records)
@@ -85,7 +85,7 @@ def save_missing_refunds(result):
 
 def save_missing_fees(result):
     print("--- 检查数据完整性... ---")
-    x = result[result['手续费'] > -1]['业务单号'].values
+    x = result[result['手续费'] >= 0]['业务单号'].values
     y = df_transaction_fee['业务单号']
     missing_records = [v for v in y if v not in x]
     print('missing_fees', missing_records)
